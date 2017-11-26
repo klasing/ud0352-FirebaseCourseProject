@@ -1,13 +1,17 @@
 package com.google.firebase.udacity.friendlychat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -168,6 +172,52 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            String channelId  = getString(R.string.default_notification_channel_id);
+            String channelName = getString(R.string.default_notification_channel_name);
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW));
+        }
+
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key);
+                Log.d(TAG, "Key: " + key + " Value: " + value);
+            }
+        }
+
+//        Button subscribeButton = findViewById(R.id.subscribeButton);
+//        subscribeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // [START subscribe_topics]
+//                FirebaseMessaging.getInstance().subscribeToTopic("news");
+//                // [END subscribe_topics]
+//
+//                // Log and toast
+//                String msg = getString(R.string.msg_subscribed);
+//                Log.d(TAG, msg);
+//                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        Button logTokenButton = findViewById(R.id.logTokenButton);
+//        logTokenButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Get token
+//                String token = FirebaseInstanceId.getInstance().getToken();
+//
+//                // Log and toast
+//                String msg = getString(R.string.msg_token_fmt, token);
+//                Log.d(TAG, msg);
+//                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     @Override
